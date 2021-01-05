@@ -45,7 +45,8 @@ sudo apt update
 
 # Install Base Packages
 echo '# === Install base packages === #'
-sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https software-properties-common dkms ssh git python3 python-apt ansible -y
+sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https software-properties-common dkms ssh git python3 python3-pip python-apt ansible -y
+sudo pip3 install bpytop --upgrade
 ```
 #### playbooks/vars/Linux Mint.yml
 ```yaml
@@ -170,6 +171,7 @@ background_destination: /usr/share/backgrounds/background.jpg
       - { src: '../files/bashrc', dest: '/home/{{ username }}/.bashrc' }
       - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
       - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
+      - { src: '../files/bpytop', dest: '/home/{{ username }}/.config/bpytop/bpytop.conf' }
 
   - name: "add ansible service user for cron job"
     user:

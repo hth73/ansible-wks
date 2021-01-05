@@ -105,6 +105,7 @@
       - { src: '../files/bashrc', dest: '/home/{{ username }}/.bashrc' }
       - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
       - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
+      - { src: '../files/bpytop', dest: '/home/{{ username }}/.config/bpytop/bpytop.conf' }
 
   - name: "add ansible service user for cron job"
     user:
