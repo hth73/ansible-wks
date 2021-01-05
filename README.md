@@ -18,6 +18,10 @@ hth@gao:~$ wget -O - https://raw.githubusercontent.com/helmutthurnhofer/ansible-
 #### Der zweite Befehl installiert/deinstalliert und konfiguriert das Linux System.
 ```console
 hth@gao:~$ ansible-pull -U https://github.com/helmutthurnhofer/ansible-wks.git playbooks/ansible_base.yml
+
+## Um das Ansible Playbook bei euch Anwenden zu können, muss die "username" Variable mit euren Benutzernamen überschrieben werden.
+##
+myuser@myhost:~$ ansible-pull -U https://github.com/helmutthurnhofer/ansible-wks.git playbooks/ansible_base.yml --extra-vars="username='$USER'" --ask-become-pass 
 ```
 
 #### scripts/install_base.sh
@@ -185,7 +189,7 @@ background_destination: /usr/share/backgrounds/background.jpg
       name: ansible auto-provision
       user: '{{ serviceuser }}'
       hour: "*/3"
-      job: ansible-pull -o -U https://github.com/helmutthurnhofer/ansible.git playbooks/ansible_base.yml
+      job: ansible-pull -o -U https://github.com/helmutthurnhofer/ansible-wks.git playbooks/ansible_base.yml
 ```
 
 #### files/config_base.sh
