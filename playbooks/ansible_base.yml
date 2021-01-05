@@ -70,19 +70,6 @@
       repo: https://github.com/Bash-it/bash-it.git
       dest: /home/{{ username }}/.bash.it
 
-  - name: "move bpytop binary from user directory to /usr/bin"
-    copy:
-      src: /home/{{ username }}/.local/bin/bpytop
-      dest: /usr/bin
-      owner: 'root'
-      group: 'root'
-      mode: '0755'
-
-  - name: "delete bpytop binary from user directory"
-    file:
-      path: /home/{{ username }}/.local/bin/bpytop
-      state: absent
-
   - name: "copy Wallpaper File"
     copy:
       src: ../files/background.jpg
