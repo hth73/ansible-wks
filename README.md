@@ -50,14 +50,14 @@ sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https s
 #### playbooks/vars/Linux Mint.yml
 ```yaml
 ---
-username: hth
+username: <USERNAME>
 serviceuser: <SERVICEUSERNAME>
 background_destination: /usr/share/backgrounds/linuxmint/background.jpg
 ```
 #### playbooks/vars/Ubuntu.yml
 ```yaml
 ---
-username: hth
+username: <USERNAME>
 serviceuser: <SERVICEUSERNAME>
 background_destination: /usr/share/backgrounds/background.jpg
 ```
