@@ -60,6 +60,7 @@ alias ver='lsb_release -dr && uname -snrm'
 alias app='dpkg -l | grep $var1'
 alias ssh='ssh -A'
 alias vi='vim'
+alias btop='bpytop'
 
 alias ll='ls -lh'
 alias lr='ls -laihR'
