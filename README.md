@@ -46,12 +46,14 @@ sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https s
 #### playbooks/vars/Linux Mint.yml
 ```yaml
 ---
+username: hth
 serviceuser: <SERVICEUSERNAME>
 background_destination: /usr/share/backgrounds/linuxmint/background.jpg
 ```
 #### playbooks/vars/Ubuntu.yml
 ```yaml
 ---
+username: hth
 serviceuser: <SERVICEUSERNAME>
 background_destination: /usr/share/backgrounds/background.jpg
 ```
@@ -65,17 +67,12 @@ background_destination: /usr/share/backgrounds/background.jpg
   vars_files: vars/{{ ansible_distribution }}.yml
 
   tasks:
-  - name: "Update apt repo"
-    apt: 
+  - name: "update and upgrade apt repo"
+    apt:
+      upgrade: 'safe'
       update_cache: yes 
       force_apt_get: yes 
-      cache_valid_time: 3600
-
-  - name: "Upgrade all packages"
-    apt: 
-      upgrade: dist 
-      force_apt_get: yes
-      autoremove: yes
+      cache_valid_time: '43200'
 
   - name: "install packages"
     package: 
@@ -138,41 +135,31 @@ background_destination: /usr/share/backgrounds/background.jpg
     copy:
       src: ../files/background.jpg
       dest: '{{ background_destination }}'
-      owner: root
-      group: root
+      owner: 'root'
+      group: 'root'
 
   - name: "copy config_base script"
     copy:
       src: ../files/config_base
-      dest: /home/{{ username }}/config_base.sh
+      dest: /home/{{ username }}/scripts/config_base.sh
       owner: '{{ username }}'
       group: '{{ username }}'
       mode: 0755
 
   - name: 'run local config script'
     become_user: '{{ username }}'
-    script: /home/{{ username }}/config_base.sh
+    script: /home/{{ username }}/scripts/config_base.sh
 
-  - name: "copy .bashrc file"
-    copy:
-      src: ../files/bashrc
-      dest: /home/{{ username }}/.bashrc
+  - name: "copy some files to the USER Home Directory"
+    copy: 
+      src: '{{ item.src }}' 
+      dest: '{{ item.dest }}'
       owner: '{{ username }}'
       group: '{{ username }}'
-
-  - name: "copy .vimrc file"
-    copy:
-      src: ../files/vimrc
-      dest: /home/{{ username }}/.vimrc
-      owner: '{{ username }}'
-      group: '{{ username }}'
-
-  - name: "copy .gitconfig file"
-    copy:
-      src: ../files/gitconfig
-      dest: /home/{{ username }}/.gitconfig
-      owner: '{{ username }}'
-      group: '{{ username }}'
+    with_items:
+      - { src: '../files/bashrc', dest: '/home/{{ username }}/.bashrc' }
+      - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
+      - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
 
   - name: "add ansible service user for cron job"
     user:
@@ -183,15 +170,15 @@ background_destination: /usr/share/backgrounds/background.jpg
     copy:
       src: ../files/sudoer_{{ serviceuser }}
       dest: /etc/sudoers.d/{{ serviceuser }}
-      owner: root
-      group: root
+      owner: 'root'
+      group: 'root'
       mode: 0440
 
   - name: "add ansible-pull cron job"
     cron:
       name: ansible auto-provision
       user: '{{ serviceuser }}'
-      minute: "*/60"
+      hour: "*/3"
       job: ansible-pull -o -U https://github.com/helmutthurnhofer/ansible.git playbooks/ansible_base.yml
 ```
 
