@@ -1,0 +1,30 @@
+[core]
+whitespace = -trailing-space
+autocrlf = input
+editor = code
+
+[user]
+name = Helmut Thurnhofer
+email = hellemon@live.de
+
+[alias]
+aliases = !git config --get-regexp alias | sed -re 's/alias\\.(\\S*)\\s(.*)$/\\1 = \\2/g'
+co = checkout
+ci = commit
+s = status -s
+st = status
+br = branch
+oops = commit --amend --no-edit
+lgg = log --graph --date-order -C -M --pretty=tformat:'<%h> %aD [%an] %Cgreen%d%Creset %s' --all --date=short
+lg = log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %aD)%Creset'
+l = log --oneline
+hist = log --pretty=format:'%h %aD | %s%d [%an]' --graph --date=short
+
+[merge]
+tool = vimdiff
+
+[help]
+autocorrect = 20
+
+[color]
+ui = auto

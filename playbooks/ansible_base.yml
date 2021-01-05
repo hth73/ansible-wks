@@ -1,0 +1,121 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+
+  vars_files: vars/{{ ansible_distribution }}.yml
+
+  tasks:
+  - name: "update and upgrade apt repo"
+    apt:
+      upgrade: 'safe'
+      update_cache: yes 
+      force_apt_get: yes 
+      cache_valid_time: '43200'
+
+  - name: "install packages"
+    package: 
+      name:
+        - chromium-browser
+        - cifs-utils
+        - code
+        - curl
+        - fdupes
+        - figlet
+        - htop
+        - ipcalc
+        - manpages-de
+        - members
+        - mmv
+        - ncdu
+        - net-tools
+        - pwgen
+        - tmux
+        - tree
+        - unzip
+        - vim
+      state: latest
+
+  - name: "uninstall packages Linux Mint"
+    package: 
+      name:
+        - firefox
+        - thunderbird
+        - rhythmbox
+        - pix
+        - drawing
+        - hexchat
+        - transmission-common
+        - transmission-gtk
+        - celluloid
+      state: absent
+    when: ansible_distribution == "Linux Mint"
+
+  - name: "uninstall packages ubuntu"
+    package: 
+      name:
+        - firefox
+        - thunderbird
+        - rhythmbox
+        - gnome-mahjongg
+        - gnome-mines
+        - gnome-sudoku
+        - aisleriot
+        - shotwell
+      state: absent
+    when: ansible_distribution == "Ubuntu"
+
+  - name: "bash-it Git Clone"
+    git:
+      repo: https://github.com/Bash-it/bash-it.git
+      dest: /home/{{ username }}/.bash.it
+
+  - name: "copy Wallpaper File"
+    copy:
+      src: ../files/background.jpg
+      dest: '{{ background_destination }}'
+      owner: 'root'
+      group: 'root'
+
+  - name: "copy config_base script"
+    copy:
+      src: ../files/config_base
+      dest: /home/{{ username }}/scripts/config_base.sh
+      owner: '{{ username }}'
+      group: '{{ username }}'
+      mode: 0755
+
+  - name: 'run local config script'
+    become_user: '{{ username }}'
+    script: /home/{{ username }}/scripts/config_base.sh
+
+  - name: "copy some files to the USER Home Directory"
+    copy: 
+      src: '{{ item.src }}' 
+      dest: '{{ item.dest }}'
+      owner: '{{ username }}'
+      group: '{{ username }}'
+    with_items:
+      - { src: '../files/bashrc', dest: '/home/{{ username }}/.bashrc' }
+      - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
+      - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
+
+  - name: "add ansible service user for cron job"
+    user:
+      name: '{{ serviceuser }}'
+      system: yes
+
+  - name: "set up sudo for ansible service user"
+    copy:
+      src: ../files/sudoer_{{ serviceuser }}
+      dest: /etc/sudoers.d/{{ serviceuser }}
+      owner: 'root'
+      group: 'root'
+      mode: 0440
+
+  - name: "add ansible-pull cron job"
+    cron:
+      name: ansible auto-provision
+      user: '{{ serviceuser }}'
+      hour: "*/3"
+      job: ansible-pull -o -U https://github.com/helmutthurnhofer/ansible.git playbooks/ansible_base.yml
