@@ -5,11 +5,15 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" This command can still be used to save the file as root.
+" instead :w you use :W
+command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+
 " Sets how many lines of history VIM has to remember
 set history=700
 
 " Set line number, showmode, list, ignore case sensitive
-set number
+"set number
 set showmode
 "set list
 set ignorecase
