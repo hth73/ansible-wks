@@ -77,13 +77,19 @@
       owner: 'root'
       group: 'root'
 
+  - name: create scripts directory if it does not exist
+    file:
+      path: /home/{{ username }}/scripts
+      state: directory
+      mode: '0755'
+
   - name: "copy config_base script"
     copy:
       src: ../files/config_base
       dest: /home/{{ username }}/scripts/config_base.sh
       owner: '{{ username }}'
       group: '{{ username }}'
-      mode: 0755
+      mode: '0755'
 
   - name: 'run local config script'
     become_user: '{{ username }}'
@@ -111,7 +117,7 @@
       dest: /etc/sudoers.d/{{ serviceuser }}
       owner: 'root'
       group: 'root'
-      mode: 0440
+      mode: '0440'
 
   - name: "add ansible-pull cron job"
     cron:
