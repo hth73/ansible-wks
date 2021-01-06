@@ -1,14 +1,14 @@
 ## Linux Mint/Ubuntu Grundkonfiguration mit Shell-Skripte und Ansible
 
 #### Beschreibung
-Hier eine kurze Anleitung wie man das Repository nutzen kann. Nachdem man sich eine Linux Maschine installiert hat. Kann man nach dem ersten Login folgenden Befehle ausführen. Dieser konfiguriert dann die Linux Maschine über ein Shell-Skript und Ansible fertig.
+Hier eine kurze Anleitung wie man das Repository nutzen kann. Nachdem man sich eine Linux Maschine installiert hat. Kann man nach dem ersten Login folgenden Befehle ausführen. Diese konfiguriert dann die Linux Maschine über ein Shell-Skript und Ansible fertig.
 
 * Linux Ubuntu 20.04.1 LTS mit Unity Desktop
 * Linux Mint 20 mit Cinnamon Desktop
 
 <a href="images/ubuntu.jpg" target="_blank"><img src="images/ubuntu.jpg" alt="Linux Ubuntu" title="Linux Ubuntu" width="268" height="180" /></a>   <a href="images/mint.jpg" target="_blank"><img src="images/mint.jpg" alt="Linux Mint" title="Linux Mint" width="268" height="180" /></a>
 
-<img src="images/information.jpg" width="15"> Der erste Lauf des Playbooks kann ein bisschen dauern, da auf Ubuntu Seite ca. 280 Pakete und auf Linux Mint Seite ca. 390 Pakete upgegradet werden.
+<img src="images/information.jpg" width="15"> Der erste Lauf des Playbooks kann ein bisschen dauern. Am Ende des Playbooks werden auf Seiten von Ubuntu ca. 280 Pakete und auf Seiten von Linux Mint ca. 390 Pakete upgegradet.
 
 #### Der erste Befehl bereitet das Linux System vor.
 ```console
@@ -17,7 +17,7 @@ hth@gao:~$ wget -O - https://raw.githubusercontent.com/helmutthurnhofer/ansible-
 
 #### Der zweite Befehl installiert/deinstalliert und konfiguriert das Linux System.
 ```console
-hth@gao:~$ ansible-pull -U https://github.com/helmutthurnhofer/ansible-wks.git playbooks/ansible_base.yml
+hth@gao:~$ ansible-pull -U https://github.com/helmutthurnhofer/ansible-wks.git playbooks/ansible_base.yml --ask-become-pass
 
 ## Um das Ansible Playbook bei euch Anwenden zu können, muss die "username" Variable mit euren Benutzernamen überschrieben werden.
 ##
@@ -53,6 +53,7 @@ sudo pip3 install bpytop --upgrade
 ---
 username: <USERNAME>
 serviceuser: <SERVICEUSERNAME>
+background_image_name: background_mint.jpg
 background_destination: /usr/share/backgrounds/linuxmint/background.jpg
 ```
 #### playbooks/vars/Ubuntu.yml
@@ -60,6 +61,7 @@ background_destination: /usr/share/backgrounds/linuxmint/background.jpg
 ---
 username: <USERNAME>
 serviceuser: <SERVICEUSERNAME>
+background_image_name: background_ubuntu.jpg
 background_destination: /usr/share/backgrounds/background.jpg
 ```
 #### playbooks/ansible_base.yml
@@ -72,19 +74,13 @@ background_destination: /usr/share/backgrounds/background.jpg
   vars_files: vars/{{ ansible_distribution }}.yml
 
   tasks:
-  - name: "update and upgrade apt repo"
-    apt:
-      upgrade: 'safe'
-      update_cache: yes 
-      force_apt_get: yes 
-      cache_valid_time: '43200'
-
   - name: "install packages"
     package: 
       name:
         - chromium-browser
         - cifs-utils
         - code
+        - copyq
         - curl
         - fdupes
         - figlet
@@ -131,47 +127,63 @@ background_destination: /usr/share/backgrounds/background.jpg
       state: absent
     when: ansible_distribution == "Ubuntu"
 
-  - name: "bash-it Git Clone"
+  - name: "bash-it - Git Clone"
     git:
       repo: https://github.com/Bash-it/bash-it.git
       dest: /home/{{ username }}/.bash.it
 
+  - name: "tmux-themepack - Git Clone"
+    git:
+      repo: https://github.com/jimeh/tmux-themepack.git
+      dest: /home/{{ username }}/.tmux-themepack
+
+  - name: "tmux fonts pack - Git Clone"
+    git:
+      repo: https://github.com/powerline/fonts.git
+      dest: /tmp/fonts
+
+  - name: "run local tmux fonts script"
+    become_user: '{{ username }}'
+    script: /tmp/fonts/install.sh
+
   - name: "copy Wallpaper File"
     copy:
-      src: ../files/background.jpg
+      src: ../files/{{ background_image_name }}
       dest: '{{ background_destination }}'
       owner: 'root'
       group: 'root'
 
-  - name: "create scripts directory"
+  - name: "create some folder to the user home directory"
     file:
-      path: /home/{{ username }}/scripts
-      state: directory
-      mode: '0755'
-
-  - name: "copy config_base script"
-    copy:
-      src: ../files/config_base
-      dest: /home/{{ username }}/scripts/config_base.sh
+      path: '{{ item.path }}' 
       owner: '{{ username }}'
       group: '{{ username }}'
+      state: directory
       mode: '0755'
+    with_items:
+      - {path: '/home/{{ username }}/scripts'}
+      - {path: '/home/{{ username }}/.config/bpytop'}
+      - {path: '/home/{{ username }}/.config/copyq'}
 
-  - name: 'run local config script'
-    become_user: '{{ username }}'
-    script: /home/{{ username }}/scripts/config_base.sh
-
-  - name: "copy some files to the USER Home Directory"
+  - name: "copy some config files to the user home directory"
     copy: 
       src: '{{ item.src }}' 
       dest: '{{ item.dest }}'
       owner: '{{ username }}'
       group: '{{ username }}'
+      mode: '0755'
     with_items:
+      - { src: '../files/config_base', dest: '/home/{{ username }}/scripts/config_base.sh' }
       - { src: '../files/bashrc', dest: '/home/{{ username }}/.bashrc' }
       - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
       - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
+      - { src: '../files/tmux', dest: '/home/{{ username }}/.tmux.conf' }
+      - { src: '../files/copyq', dest: '/home/{{ username }}/.config/copyq/copyq.conf' }
       - { src: '../files/bpytop', dest: '/home/{{ username }}/.config/bpytop/bpytop.conf' }
+
+  - name: "run local config script"
+    become_user: '{{ username }}'
+    script: /home/{{ username }}/scripts/config_base.sh
 
   - name: "add ansible service user for cron job"
     user:
@@ -192,6 +204,18 @@ background_destination: /usr/share/backgrounds/background.jpg
       user: '{{ serviceuser }}'
       hour: "*/3"
       job: ansible-pull -o -U https://github.com/helmutthurnhofer/ansible-wks.git playbooks/ansible_base.yml
+
+  - name: "Remove /tmp/fonts directory"
+    file:
+      path: /tmp/fonts
+      state: absent
+
+  - name: "update and upgrade apt repo"
+    apt:
+      upgrade: 'safe'
+      update_cache: yes 
+      force_apt_get: yes 
+      cache_valid_time: '43200'
 ```
 
 #### files/config_base.sh
@@ -207,9 +231,9 @@ source /etc/os-release
 
 if [[ "$NAME" = "Ubuntu" ]]; 
 then
-  gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/background.jpg'
+  gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/background_ubuntu.jpg'
   gsettings set org.gnome.desktop.background picture-options 'zoom'
-  gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/background.jpg'
+  gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/background_ubuntu.jpg'
   gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
 
   gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
@@ -226,9 +250,9 @@ then
 
 elif [[ "$NAME" = "Linux Mint" ]]
 then
-  gsettings set org.cinnamon.desktop.background picture-uri 'file:///usr/share/backgrounds/linuxmint/background.jpg'
+  gsettings set org.cinnamon.desktop.background picture-uri 'file:///usr/share/backgrounds/linuxmint/background_mint.jpg'
   gsettings set org.cinnamon.desktop.background picture-options 'zoom'
-  gsettings set org.mate.background picture-filename 'file:///usr/share/backgrounds/linuxmint/background.jpg'
+  gsettings set org.mate.background picture-filename 'file:///usr/share/backgrounds/linuxmint/background_mint.jpg'
   gsettings set org.mate.background picture-options 'zoom'
 
   gsettings set org.nemo.preferences show-computer-icon-toolbar true
@@ -251,7 +275,7 @@ then
   gsettings set org.cinnamon panels-height "['1:28']" 
 
 else
-  echo "Das Betriebssystem ist weder ein Ubuntu noch ein Linux Mint, das Script wird abgebrochen"
+  echo "Das Betriebssystem ist weder ein Ubuntu noch ein Linux Mint, das Script wird beendet."
 
 fi
 ```
