@@ -6,13 +6,6 @@
   vars_files: vars/{{ ansible_distribution }}.yml
 
   tasks:
-  - name: "update and upgrade apt repo"
-    apt:
-      upgrade: 'safe'
-      update_cache: yes 
-      force_apt_get: yes 
-      cache_valid_time: '43200'
-
   - name: "install packages"
     package: 
       name:
@@ -92,7 +85,7 @@
       owner: 'root'
       group: 'root'
 
-  - name: "create folders for config files"
+  - name: "create some folder to the user home directory"
     file:
       path: '{{ item.path }}' 
       owner: '{{ username }}'
@@ -104,31 +97,25 @@
       - {path: '/home/{{ username }}/.config/bpytop'}
       - {path: '/home/{{ username }}/.config/copyq'}
 
-  - name: "copy config_base script"
-    copy:
-      src: ../files/config_base
-      dest: /home/{{ username }}/scripts/config_base.sh
-      owner: '{{ username }}'
-      group: '{{ username }}'
-      mode: '0755'
-
-  - name: "run local config script"
-    become_user: '{{ username }}'
-    script: /home/{{ username }}/scripts/config_base.sh
-
-  - name: "copy some files to the USER Home Directory"
+  - name: "copy some config files to the user home directory"
     copy: 
       src: '{{ item.src }}' 
       dest: '{{ item.dest }}'
       owner: '{{ username }}'
       group: '{{ username }}'
+      mode: '0755'
     with_items:
+      - { src: '../files/config_base', dest: '/home/{{ username }}/scripts/config_base.sh' }
       - { src: '../files/bashrc', dest: '/home/{{ username }}/.bashrc' }
       - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
       - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
       - { src: '../files/tmux', dest: '/home/{{ username }}/.tmux.conf' }
       - { src: '../files/copyq', dest: '/home/{{ username }}/.config/copyq/copyq.conf' }
       - { src: '../files/bpytop', dest: '/home/{{ username }}/.config/bpytop/bpytop.conf' }
+
+  - name: "run local config script"
+    become_user: '{{ username }}'
+    script: /home/{{ username }}/scripts/config_base.sh
 
   - name: "add ansible service user for cron job"
     user:
@@ -154,3 +141,10 @@
     file:
       path: /tmp/fonts
       state: absent
+
+  - name: "update and upgrade apt repo"
+    apt:
+      upgrade: 'safe'
+      update_cache: yes 
+      force_apt_get: yes 
+      cache_valid_time: '43200'
