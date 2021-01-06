@@ -19,6 +19,7 @@
         - chromium-browser
         - cifs-utils
         - code
+        - copyq
         - curl
         - fdupes
         - figlet
@@ -70,6 +71,20 @@
       repo: https://github.com/Bash-it/bash-it.git
       dest: /home/{{ username }}/.bash.it
 
+  - name: "btmux-themepack Git Clone"
+    git:
+      repo: https://github.com/jimeh/tmux-themepack.git
+      dest: /home/{{ username }}/.tmux-themepack
+
+  - name: "tmux fonts pack Git Clone"
+    git:
+      repo: https://github.com/powerline/fonts.git
+      dest: /tmp/fonts
+
+  - name: "run local tmux fonts script"
+    become_user: '{{ username }}'
+    script: /tmp/fonts/install.sh
+
   - name: "copy Wallpaper File"
     copy:
       src: ../files/{{ background_image_name }}
@@ -91,7 +106,7 @@
       group: '{{ username }}'
       mode: '0755'
 
-  - name: 'run local config script'
+  - name: "run local config script"
     become_user: '{{ username }}'
     script: /home/{{ username }}/scripts/config_base.sh
 
@@ -106,6 +121,7 @@
       - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
       - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
       - { src: '../files/tmux', dest: '/home/{{ username }}/.tmux.conf' }
+      - { src: '../files/copyq', dest: '/home/{{ username }}/.config/copyq/copyq.conf' }
       - { src: '../files/bpytop', dest: '/home/{{ username }}/.config/bpytop/bpytop.conf' }
 
   - name: "add ansible service user for cron job"
@@ -127,3 +143,8 @@
       user: '{{ serviceuser }}'
       hour: "*/3"
       job: ansible-pull -o -U https://github.com/helmutthurnhofer/ansible-wks.git playbooks/ansible_base.yml
+
+  - name: "Remove /tmp/fonts directory"
+    file:
+      path: /tmp/fonts
+      state: absent

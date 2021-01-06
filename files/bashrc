@@ -33,7 +33,7 @@ HISTTIMEFORMAT="%d %B %H:%M:%S> "
 HISTCONTROL=ignoredups:erasedups
 HISTSIZE=1000
 HISTFILESIZE=1000
-HISTIGNORE="ls*:ll*:lr*:cd -:cd ~:[1-4].:h:history*:x:exit:c:clear*:pwd:up:ver:app"
+HISTIGNORE="h:history*:x:exit:c:clear*:pwd:up:ver:app"
 
 ## function create and switch folder
 function mkcd () {
