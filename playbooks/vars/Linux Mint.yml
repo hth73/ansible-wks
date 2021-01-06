@@ -1,4 +1,5 @@
 ---
 username: hth
 serviceuser: sansible
+background_image_name: background_mint.jpg
 background_destination: /usr/share/backgrounds/linuxmint/background.jpg

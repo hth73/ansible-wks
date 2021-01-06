@@ -9,9 +9,9 @@ source /etc/os-release
 
 if [[ "$NAME" = "Ubuntu" ]]; 
 then
-  gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/background.jpg'
+  gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/background_ubuntu.jpg'
   gsettings set org.gnome.desktop.background picture-options 'zoom'
-  gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/background.jpg'
+  gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/background_ubuntu.jpg'
   gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
 
   gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
@@ -28,9 +28,9 @@ then
 
 elif [[ "$NAME" = "Linux Mint" ]]
 then
-  gsettings set org.cinnamon.desktop.background picture-uri 'file:///usr/share/backgrounds/linuxmint/background.jpg'
+  gsettings set org.cinnamon.desktop.background picture-uri 'file:///usr/share/backgrounds/linuxmint/background_mint.jpg'
   gsettings set org.cinnamon.desktop.background picture-options 'zoom'
-  gsettings set org.mate.background picture-filename 'file:///usr/share/backgrounds/linuxmint/background.jpg'
+  gsettings set org.mate.background picture-filename 'file:///usr/share/backgrounds/linuxmint/background_mint.jpg'
   gsettings set org.mate.background picture-options 'zoom'
 
   gsettings set org.nemo.preferences show-computer-icon-toolbar true

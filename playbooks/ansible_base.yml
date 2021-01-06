@@ -72,7 +72,7 @@
 
   - name: "copy Wallpaper File"
     copy:
-      src: ../files/background.jpg
+      src: ../files/{{ background_image_name }}
       dest: '{{ background_destination }}'
       owner: 'root'
       group: 'root'
@@ -105,6 +105,7 @@
       - { src: '../files/bashrc', dest: '/home/{{ username }}/.bashrc' }
       - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
       - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
+      - { src: '../files/tmux', dest: '/home/{{ username }}/.tmux.conf' }
       - { src: '../files/bpytop', dest: '/home/{{ username }}/.config/bpytop/bpytop.conf' }
 
   - name: "add ansible service user for cron job"
