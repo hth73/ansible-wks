@@ -92,13 +92,17 @@
       owner: 'root'
       group: 'root'
 
-  - name: "create scripts directory"
+  - name: "create folders for config files"
     file:
-      path: /home/{{ username }}/scripts
+      path: '{{ item.path }}' 
       owner: '{{ username }}'
       group: '{{ username }}'
       state: directory
       mode: '0755'
+    with_items:
+      - {path: '/home/{{ username }}/scripts'}
+      - {path: '/home/{{ username }}/.config/bpytop'}
+      - {path: '/home/{{ username }}/.config/copyq'}
 
   - name: "copy config_base script"
     copy:
