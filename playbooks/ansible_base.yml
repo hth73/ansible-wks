@@ -95,6 +95,8 @@
   - name: "create scripts directory"
     file:
       path: /home/{{ username }}/scripts
+      owner: '{{ username }}'
+      group: '{{ username }}'
       state: directory
       mode: '0755'
 
