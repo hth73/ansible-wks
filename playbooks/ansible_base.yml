@@ -135,7 +135,7 @@
       name: ansible auto-provision
       user: '{{ serviceuser }}'
       hour: "*/3"
-      job: ansible-pull -o -U https://github.com/helmutthurnhofer/ansible-wks.git playbooks/ansible_base.yml
+      job: ansible-pull -o -U https://github.com/hth73/ansible-wks.git playbooks/ansible_base.yml
 
   - name: "Remove /tmp/fonts directory"
     file:
