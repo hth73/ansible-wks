@@ -19,7 +19,3 @@ sudo apt update
 echo '# === Install base packages === #'
 sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https software-properties-common powerline dkms ssh git python3 python3-pip python-apt ansible -y
 sudo pip3 install bpytop --upgrade
-
-# Install Ansible Base Packages
-echo '# === Install Ansible Base Packages === #'
-ansible-pull -U https://github.com/hth73/ansible-wks.git playbooks/ansible_base.yml

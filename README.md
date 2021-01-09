@@ -10,17 +10,16 @@ Hier eine kurze Anleitung wie man das Repository nutzen kann. Nachdem man sich e
 
 <img src="images/information.jpg" width="15"> Der erste Lauf des Playbooks kann ein bisschen dauern. Am Ende des Playbooks werden auf Seiten von Ubuntu ca. 280 Pakete und auf Seiten von Linux Mint ca. 390 Pakete upgegradet.
 
-#### Der erste Befehl bereitet das Linux System vor.
+#### Linux System vorbereiten und Playbook ausführen
 ```console
 hth@gao:~$ wget -O - https://raw.githubusercontent.com/hth73/ansible-wks/main/scripts/install_base.sh | bash
 ```
 
-#### Der zweite Befehl installiert/deinstalliert und konfiguriert das Linux System.
+#### Wenn man das Playbook ausprobieren möchte, dienen folgende Befehle
 ```console
-hth@gao:~$ ansible-pull -U https://github.com/hth73/ansible-wks.git playbooks/ansible_base.yml --ask-become-pass
-
 ## Um das Ansible Playbook bei euch Anwenden zu können, muss die "username" Variable mit euren Benutzernamen überschrieben werden.
 ##
+myuser@myhost:~$ wget -O - https://raw.githubusercontent.com/hth73/ansible-wks/main/scripts/install_base_username.sh | bash
 myuser@myhost:~$ ansible-pull -U https://github.com/hth73/ansible-wks.git playbooks/ansible_base.yml --extra-vars="username='$USER'" --ask-become-pass 
 ```
 
@@ -45,9 +44,39 @@ sudo apt update
 
 # Install Base Packages
 echo '# === Install base packages === #'
+sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https software-properties-common powerline dkms ssh git python3 python3-pip python-apt ansible -y
+sudo pip3 install bpytop --upgrade
+
+# Install Ansible Base Packages
+echo '# === Install Ansible Base Packages === #'
+ansible-pull -U https://github.com/hth73/ansible-wks.git playbooks/ansible_base.yml
+```
+
+#### scripts/install_base_username.sh
+```bash
+#!/usr/bin/env bash
+set -e
+
+# ======================================================================
+#   Bash script to Install Base Packages on a Linux Mint/Ubuntu System
+# ======================================================================
+
+# Add Microsoft gpg Key to Keyring
+echo '# === Add Microsoft gpg Key to Keyring === #'
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+
+# System Update
+echo '# === System Update === #'
+sudo apt update
+
+# Install Base Packages
+echo '# === Install base packages === #'
 sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https software-properties-common dkms ssh git python3 python3-pip python-apt ansible -y
 sudo pip3 install bpytop --upgrade
 ```
+
 #### playbooks/vars/Linux Mint.yml
 ```yaml
 ---
@@ -56,6 +85,7 @@ serviceuser: <SERVICEUSERNAME>
 background_image_name: background_mint.jpg
 background_destination: /usr/share/backgrounds/linuxmint/background.jpg
 ```
+
 #### playbooks/vars/Ubuntu.yml
 ```yaml
 ---
@@ -64,6 +94,7 @@ serviceuser: <SERVICEUSERNAME>
 background_image_name: background_ubuntu.jpg
 background_destination: /usr/share/backgrounds/background.jpg
 ```
+
 #### playbooks/ansible_base.yml
 ```yaml
 ---
@@ -279,6 +310,7 @@ else
 
 fi
 ```
+
 #### files/sudoer_sansible
 ```bash
 sansible ALL=(ALL) NOPASSWD: ALL
