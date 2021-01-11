@@ -24,6 +24,7 @@
         - ncdu
         - net-tools
         - pwgen
+        - python-apt
         - tmux
         - tree
         - unzip

@@ -17,7 +17,7 @@ sudo apt update
 
 # Install Base Packages
 echo '# === Install base packages === #'
-sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https software-properties-common powerline dkms ssh git python3 python3-pip python-apt ansible -y
+sudo apt install linux-headers-$(uname -r) build-essential apt-transport-https software-properties-common powerline dkms ssh git python3 python3-pip ansible -y
 sudo pip3 install bpytop --upgrade
 
 # Install Ansible Base Packages
