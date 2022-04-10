@@ -6,9 +6,9 @@ Hier eine kurze Anleitung wie man das Repository nutzen kann. Nachdem man sich e
 * Linux Ubuntu 20.04.1 LTS mit Unity Desktop
 * Linux Mint 20 mit Cinnamon Desktop
 
-<a href="../images/ubuntu.jpg" target="_blank"><img src="images/ubuntu.jpg" alt="Linux Ubuntu" title="Linux Ubuntu" width="268" height="180" /></a>   <a href="images/mint.jpg" target="_blank"><img src="../images/mint.jpg" alt="Linux Mint" title="Linux Mint" width="268" height="180" /></a>
+<a href="ubuntu-mint/images/ubuntu.jpg" target="_blank"><img src="ubuntu-mint/images/ubuntu.jpg" alt="Linux Ubuntu" title="Linux Ubuntu" width="268" height="180" /></a>   <a href="ubuntu-mint/images/mint.jpg" target="_blank"><img src="ubuntu-mint/images/mint.jpg" alt="Linux Mint" title="Linux Mint" width="268" height="180" /></a>
 
-<img src="../images/information.jpg" width="15"> Der erste Lauf des Playbooks kann ein bisschen dauern. Am Ende des Playbooks werden auf Seiten von Ubuntu ca. 280 Pakete und auf Seiten von Linux Mint ca. 390 Pakete upgegradet.
+<img src="ubuntu-mint/images/information.jpg" width="15"> Der erste Lauf des Playbooks kann ein bisschen dauern. Am Ende des Playbooks werden auf Seiten von Ubuntu ca. 280 Pakete und auf Seiten von Linux Mint ca. 390 Pakete upgegradet.
 
 #### Linux System vorbereiten und Playbook ausführen
 ```console
