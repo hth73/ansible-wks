@@ -45,7 +45,7 @@ sudo pip3 install bpytop --upgrade
 
 # upgrade all packages
 echo '# === upgrade all packages === #'
-sudo apt full-upgrade -y && sudo autoremove -y
+sudo apt full-upgrade -y && sudo apt autoremove -y
 
 # Install Ansible Base Packages
 # echo '# === Install Ansible Base Packages === #'
