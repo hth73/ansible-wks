@@ -37,7 +37,7 @@ sudo apt install powerline python3 python3-pip ansible -y
 
 # Install useful tools
 echo '# === Install common tools packages === #'
-sudo apt install ssh git dirmngr gnupg direnv zsh ssh vim git tree curl lsof net-tools pwgen ncdu tmux unzip ipcalc figlet manpages-de deepin-screenshot sublime-text nextcloud-client codium chromium-browser -y
+sudo apt install ssh git dirmngr gnupg direnv zsh ssh vim git tree curl lsof net-tools pwgen ncdu tmux unzip ipcalc figlet manpages-de deepin-screenshot sublime-text nextcloud-client codium -y
 
 # Install bpytop
 echo '# === Install bpytop packages === #'
