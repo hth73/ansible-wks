@@ -6,21 +6,25 @@ Hier eine kurze Anleitung wie man das Repository nutzen kann. Nachdem man sich e
 * Linux Ubuntu 20.04.1 LTS mit Unity Desktop
 * Linux Mint 20 mit Cinnamon Desktop
 
-<a href="images/ubuntu.jpg" target="_blank"><img src="images/ubuntu.jpg" alt="Linux Ubuntu" title="Linux Ubuntu" width="268" height="180" /></a>   <a href="images/mint.jpg" target="_blank"><img src="images/mint.jpg" alt="Linux Mint" title="Linux Mint" width="268" height="180" /></a>
+<a href="../images/ubuntu.jpg" target="_blank"><img src="images/ubuntu.jpg" alt="Linux Ubuntu" title="Linux Ubuntu" width="268" height="180" /></a>   <a href="images/mint.jpg" target="_blank"><img src="../images/mint.jpg" alt="Linux Mint" title="Linux Mint" width="268" height="180" /></a>
 
-<img src="images/information.jpg" width="15"> Der erste Lauf des Playbooks kann ein bisschen dauern. Am Ende des Playbooks werden auf Seiten von Ubuntu ca. 280 Pakete und auf Seiten von Linux Mint ca. 390 Pakete upgegradet.
+<img src="../images/information.jpg" width="15"> Der erste Lauf des Playbooks kann ein bisschen dauern. Am Ende des Playbooks werden auf Seiten von Ubuntu ca. 280 Pakete und auf Seiten von Linux Mint ca. 390 Pakete upgegradet.
 
 #### Linux System vorbereiten und Playbook ausführen
 ```console
-hth@gao:~$ wget -O - https://raw.githubusercontent.com/hth73/ansible-wks/main/scripts/install_base.sh | bash
+# Ubuntu und Linux Mint
+hth@gao:~$ wget -O - https://raw.githubusercontent.com/hth73/ansible-wks/main/ubuntu-mint/scripts/install_base.sh | bash
+
+# Zorin OS
+hth@gao:~$ wget -O - https://raw.githubusercontent.com/hth73/ansible-wks/main/zorin/scripts/install_base.sh | bash
 ```
 
 #### Wenn man das Playbook ausprobieren möchte, dienen folgende Befehle
 ```console
 ## Um das Ansible Playbook bei euch Anwenden zu können, muss die "username" Variable mit euren Benutzernamen überschrieben werden.
 ##
-myuser@myhost:~$ wget -O - https://raw.githubusercontent.com/hth73/ansible-wks/main/scripts/install_base_username.sh | bash
-myuser@myhost:~$ ansible-pull -U https://github.com/hth73/ansible-wks.git playbooks/ansible_base.yml --extra-vars="username='$USER'" --ask-become-pass 
+myuser@myhost:~$ wget -O - https://raw.githubusercontent.com/hth73/ansible-wks/main/ubuntu-mint/scripts/install_base_username.sh | bash
+myuser@myhost:~$ ansible-pull -U https://github.com/hth73/ansible-wks.git ubuntu-mint/playbooks/ansible_base.yml --extra-vars="username='$USER'" --ask-become-pass 
 ```
 
 #### scripts/install_base.sh

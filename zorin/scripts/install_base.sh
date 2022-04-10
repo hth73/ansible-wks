@@ -43,10 +43,6 @@ sudo apt install ssh git dirmngr gnupg direnv zsh ssh vim git tree curl lsof net
 echo '# === Install bpytop packages === #'
 sudo pip3 install bpytop --upgrade
 
-# upgrade all packages
-echo '# === upgrade all packages === #'
-sudo apt full-upgrade -y && sudo apt autoremove -y
-
 Install Ansible Base Packages
 echo '# === Install Ansible Base Packages === #'
-ansible-pull -U https://github.com/hth73/ansible-wks.git playbooks/ansible_base.yml
+ansible-pull -U https://github.com/hth73/ansible-wks.git zorin/playbooks/ansible_base.yml
