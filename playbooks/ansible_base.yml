@@ -64,7 +64,7 @@
       repo: https://github.com/Bash-it/bash-it.git
       dest: /home/{{ username }}/.bash.it
 
-  - name: "btmux-themepack Git Clone"
+  - name: "tmux-themepack Git Clone"
     git:
       repo: https://github.com/jimeh/tmux-themepack.git
       dest: /home/{{ username }}/.tmux-themepack
