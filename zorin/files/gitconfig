@@ -1,0 +1,62 @@
+[core]
+  excludesfile = ~/.gitignore_global
+  whitespace   = trailing-space,space-before-tab
+  autocrlf     = input
+  editor       = /usr/bin/vim
+  pager        = cat
+
+[user]
+  name  = Helmut Thurnhofer
+  email = 
+
+[format]
+  pretty = %C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ci)
+
+[merge]
+  tool = vimdiff
+
+[help]
+  autocorrect = 20
+
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+  showbranch = auto
+  ui = true
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[branch]
+  autosetuprebase = always
+
+[alias]
+  aliases = !git config --get-regexp alias | sed -re 's/alias\\.(\\S*)\\s(.*)$/\\1 = \\2/g'
+
+  co = checkout
+  ci = commit
+  s  = status -s
+  st = status
+  br = branch
+
+  oops = commit --amend --no-edit
+
+  log  = log --graph --abbrev-commit
+  lgg  = log --graph --date-order -C -M --pretty=tformat:'<%h> %aD [%an] %Cgreen%d%Creset %s' --all --date=short
+  lg   = log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %aD)%Creset'
+  l    = log --oneline
+  hist = log --pretty=format:'%h %aD | %s%d [%an]' --graph --date=short
+
+[pull]
+  rebase = true
+
+[push]
+  default = upstream
+  followTags = true
+
+[tag]
+  # Sort tags as version numbers whenever applicable, so 1.10.2 is AFTER 1.2.0.
+  sort = version:refname

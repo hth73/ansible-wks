@@ -1,0 +1,73 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+
+  vars_files: vars/{{ ansible_distribution }}.yml
+
+  tasks:
+  - name: "tmux-themepack Git Clone"
+    git:
+      repo: https://github.com/jimeh/tmux-themepack.git
+      dest: /home/{{ username }}/.tmux-themepack
+
+  - name: "tmux fonts pack Git Clone"
+    git:
+      repo: https://github.com/powerline/fonts.git
+      dest: /tmp/fonts
+
+  - name: "run local tmux fonts script"
+    become_user: '{{ username }}'
+    script: /tmp/fonts/install.sh
+
+  - name: "copy Wallpaper File"
+    copy:
+      src: ../files/{{ background_image_name }}
+      dest: '{{ background_destination }}'
+      owner: 'root'
+      group: 'root'
+
+  - name: "create some folder to the user home directory"
+    file:
+      path: '{{ item.path }}' 
+      owner: '{{ username }}'
+      group: '{{ username }}'
+      state: directory
+      mode: '0755'
+    with_items:
+      - {path: '/home/{{ username }}/bin'}
+      - {path: '/home/{{ username }}/repo'}     
+      - {path: '/home/{{ username }}/scripts'}
+      - {path: '/home/{{ username }}/.config/bpytop'}
+
+  - name: "copy some config files to the user home directory"
+    copy: 
+      src: '{{ item.src }}' 
+      dest: '{{ item.dest }}'
+      owner: '{{ username }}'
+      group: '{{ username }}'
+      mode: '0755'
+    with_items:
+      - { src: '../files/config_base', dest: '/home/{{ username }}/scripts/config_base.sh' }
+      - { src: '../files/zshrc', dest: '/home/{{ username }}/Documents/zshrc' }
+      - { src: '../files/envrc', dest: '/home/{{ username }}/.envrc' }
+      - { src: '../files/vimrc', dest: '/home/{{ username }}/.vimrc' }
+      - { src: '../files/gitconfig', dest: '/home/{{ username }}/.gitconfig' }
+      - { src: '../files/tmux', dest: '/home/{{ username }}/.tmux.conf' }
+      - { src: '../files/bpytop', dest: '/home/{{ username }}/.config/bpytop/bpytop.conf' }
+
+  - name: "run local config script"
+    become_user: '{{ username }}'
+    script: /home/{{ username }}/scripts/config_base.sh
+
+  - name: "Remove /tmp/fonts directory"
+    file:
+      path: /tmp/fonts
+      state: absent
+
+  - name: "update and upgrade apt repo"
+    apt:
+      upgrade: 'safe'
+      update_cache: yes 
+      force_apt_get: yes 
+      cache_valid_time: '43200'

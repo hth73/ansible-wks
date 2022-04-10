@@ -1,0 +1,4 @@
+export repo=~/repo
+# export config=~/repo/infra-config
+# export packer=~/repo/infra-packer
+# export terraform=~/repo/infra-terraform

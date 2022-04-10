@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -e
+
+# ======================================================================
+#   Bash script to set desktop and nautilus settings
+# ======================================================================
+
+source /etc/os-release
+
+if [[ "$NAME" = "Zorin OS" ]];
+
+then
+  gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/background_zorin.jpg'
+  gsettings set org.gnome.desktop.background picture-options 'zoom'
+  gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/background_zorin.jpg'
+  gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
+
+  gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
+  gsettings set org.gnome.nautilus.preferences always-use-location-entry true
+  gsettings set org.gnome.nautilus.list-view default-zoom-level 'small'
+  gsettings set org.gtk.Settings.FileChooser show-hidden true
+
+  gsettings set org.gnome.shell.extensions.zorin-desktop-icons show-home false
+  gsettings set org.gnome.shell.extensions.zorin-desktop-icons show-trash false
+  gsettings set org.gnome.shell.extensions.zorin-taskbar panel-size '36'
+
+  gsettings set org.gnome.desktop.screensaver lock-enabled false
+
+else
+  echo "Das Betriebssystem ist kein Zorin OS, das Script wird beendet."
+  exit 0
+
+fi
