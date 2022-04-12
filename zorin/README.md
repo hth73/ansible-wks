@@ -7,7 +7,7 @@ Hier eine kurze Anleitung wie man das Repository nutzen kann.
 ## Beschreibung
 Nachdem man sich eine Linux Maschine installiert hat. Nach dem ersten Login wird folgender Befehl ausführen. Diese konfiguriert dann die passende Linux Maschine über ein Shell-Skript und Ansible fertig.
 
-<a href="images/zorin2.jpg" target="_blank"><img src="images/zorin2.jpg" alt="Linux Zorin OS" title="Linux Zorin OS" width="268" height="180" /></a>
+<a href="images/zorin.jpg" target="_blank"><img src="images/zorin.jpg" alt="Linux Zorin OS" title="Linux Zorin OS" width="268" height="180" /></a>
 
 <img src="images/information.jpg" width="15"> Der erste Lauf des Playbooks kann ein bisschen dauern.
 
